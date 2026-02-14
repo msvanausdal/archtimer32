@@ -168,7 +168,7 @@ esp_err_t start_handler(httpd_req_t *req) {
 
 esp_err_t stop_handler(httpd_req_t *req) {
     is_active = false; current_phase = IDLE; time_left = 0;
-    whistle(4); 
+    whistle(5); 
     return httpd_resp_sendstr(req, "OK");
 }
 

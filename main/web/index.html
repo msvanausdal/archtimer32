@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/style.css">
+    <title>ArchTimer32</title>
+</head>
+<body>
+    <div class="header">
+        <span class="brand">ARCHTIMER32</span>
+        <a href="/config" class="settings-link">CONFIG</a>
+    </div>
+
+    <div class="content">
+        <div class="phase-label" id="phase-name">READY</div>
+        <div id="timer-display">00:00</div>
+        
+        <div style="margin-top: 20px;">
+            <button id="mainBtn" class="main-btn" onclick="toggleSession()">START SESSION</button>
+        </div>
+    </div>
+
+    <script>
+        let is_running = false;
+
+        function toggleSession() {
+            const endpoint = is_running ? '/stop' : '/start';
+            fetch(endpoint).then(res => {
+                if(res.ok) console.log("Command sent");
+            });
+        }
+
+        function updateStatus() {
+            fetch('/status')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('timer-display').innerText = data.time;
+                    document.getElementById('phase-name').innerText = data.phase;
+                    
+                    const btn = document.getElementById('mainBtn');
+                    is_running = data.is_running;
+                    
+                    if(is_running) {
+                        btn.innerText = "STOP / CLEAR RANGE";
+                        btn.classList.add('stop');
+                    } else {
+                        btn.innerText = "START SESSION";
+                        btn.classList.remove('stop');
+                    }
+                })
+                .catch(err => console.log("Connection lost"));
+        }
+
+        setInterval(updateStatus, 500);
+    </script>
+</body>
+</html>

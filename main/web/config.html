@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/style.css">
+    <title>Settings | ArchTimer32</title>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="settings-link">BACK</a>
+        <span class="brand">SETTINGS</span>
+        <div style="width:60px;"></div>
+    </div>
+
+    <div class="content">
+        <div class="config-group">
+            <h3>ARCHERY TIMING (SECONDS)</h3>
+            <div class="config-row">
+                <span>SETUP DELAY</span>
+                <div class="controls">
+                    <input type="checkbox" id="en_setup">
+                    <input type="number" id="t_setup">
+                </div>
+            </div>
+            <div class="config-row">
+                <span>SHOOT TIME</span>
+                <div class="controls">
+                    <input type="checkbox" id="en_shoot">
+                    <input type="number" id="t_shoot">
+                </div>
+            </div>
+            <div class="config-row">
+                <span>WARNING TIME</span>
+                <div class="controls">
+                    <input type="checkbox" id="en_warn">
+                    <input type="number" id="t_warn">
+                </div>
+            </div>
+        </div>
+
+        <div class="config-group">
+            <h3>AUDIO SYNTHESIS (FM)</h3>
+            <div class="config-row">
+                <span>BASE PITCH (HZ)</span>
+                <input type="number" id="f_base">
+            </div>
+            <div class="config-row">
+                <span>DEVIATION (HZ)</span>
+                <input type="number" id="f_dev">
+            </div>
+            <div class="config-row">
+                <span>WARBLE RATE (MS)</span>
+                <input type="number" id="f_mod_ms">
+            </div>
+        </div>
+
+        <div class="config-group">
+            <h3>OUTPUT CONTROL</h3>
+            <div class="config-row">
+                <span>DUTY CYCLE (0-255)</span>
+                <input type="number" id="duty">
+            </div>
+            <div class="config-row">
+                <span>BLAST LENGTH (MS)</span>
+                <input type="number" id="b_len">
+            </div>
+        </div>
+
+        <button class="main-btn" onclick="saveConfig()">SAVE SETTINGS</button>
+        <div id="saveStatus" style="text-align:center; color: #ceb864; margin-top: 15px; font-weight: bold;"></div>
+    </div>
+
+    <script>
+        const fields = [
+            't_setup', 't_shoot', 't_warn', 
+            'en_setup', 'en_shoot', 'en_warn', 
+            'f_base', 'f_dev', 'f_mod_ms', 
+            'duty', 'b_len'
+        ];
+
+        window.onload = function() {
+            fetch('/get_config')
+                .then(res => res.json())
+                .then(data => {
+                    fields.forEach(f => {
+                        const el = document.getElementById(f);
+                        if (!el) return;
+                        if (el.type === 'checkbox') el.checked = data[f];
+                        else el.value = data[f];
+                    });
+                })
+                .catch(err => {
+                    document.getElementById('saveStatus').innerText = "ERROR LOADING SETTINGS";
+                });
+        };
+
+        function saveConfig() {
+            const config = {};
+            fields.forEach(f => {
+                const el = document.getElementById(f);
+                if (!el) return;
+                config[f] = (el.type === 'checkbox') ? el.checked : parseInt(el.value);
+            });
+
+            fetch('/save_config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(config)
+            }).then(res => {
+                if (res.ok) {
+                    document.getElementById('saveStatus').innerText = "SETTINGS SAVED";
+                    setTimeout(() => { document.getElementById('saveStatus').innerText = ""; }, 3000);
+                } else {
+                    document.getElementById('saveStatus').innerText = "SAVE FAILED";
+                }
+            }).catch(err => {
+                document.getElementById('saveStatus').innerText = "NETWORK ERROR";
+            });
+        }
+    </script>
+</body>
+</html>

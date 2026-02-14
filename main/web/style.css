@@ -1,0 +1,108 @@
+/* Purdue ArchTimer32 Stylesheet */
+:root {
+    --gold: #ceb864; 
+    --black: #000000;
+    --dark-gold: #9d813b;
+    --bg: #121212;
+    --card: #1e1e1e;
+    --stop: #d32f2f;
+}
+
+* { box-sizing: border-box; }
+
+body { 
+    margin: 0; 
+    background-color: var(--bg); 
+    color: #ffffff; 
+    font-family: sans-serif;
+    line-height: 1.5;
+}
+
+.header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 15px; 
+    background: var(--black);
+    border-bottom: 3px solid var(--gold);
+}
+
+.brand { 
+    font-weight: bold; 
+    color: var(--gold); 
+    font-size: 1.1rem;
+}
+
+.settings-link { 
+    text-decoration: none; 
+    color: var(--gold); 
+    font-weight: bold;
+    border: 2px solid var(--gold);
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+}
+
+/* Container for scrolling */
+.content {
+    padding: 20px;
+    padding-bottom: 120px; /* Room for fixed/bottom buttons */
+}
+
+#timer-display { 
+    font-size: 5rem; 
+    font-weight: bold; 
+    text-align: center;
+    margin: 30px 0;
+    display: block;
+}
+
+.phase-label {
+    text-align: center;
+    color: var(--gold);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+/* Config Groups */
+.config-group { 
+    background: var(--card); 
+    margin-bottom: 20px; 
+    padding: 20px; 
+    border-radius: 10px; 
+}
+
+h3 { 
+    margin-top: 0; 
+    color: var(--gold); 
+    font-size: 0.9rem; 
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+.config-row { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 15px; 
+}
+
+/* Button Styling */
+.main-btn { 
+    display: block;
+    width: 100%; 
+    padding: 20px;
+    border-radius: 10px; 
+    border: none;
+    font-size: 1.3rem; 
+    font-weight: bold; 
+    cursor: pointer;
+    background: var(--gold);
+    color: var(--black);
+    text-transform: uppercase;
+}
+
+.main-btn.stop {
+    background: var(--stop);
+    color: white;
+}
